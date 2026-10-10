@@ -14,18 +14,25 @@ export enum ReservationStatus {
 }
 
 export interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
-  password: string;
   role: Role;
+  isActive: boolean;
 }
 
-export interface UserDoc extends Omit<User, "id"> {}
+export interface StudyRoom {
+  id: number;
+  name: string;
+  building: string;
+  capacity: number;
+  hasProjector: boolean;
+  isAvailable: boolean;
+}
 
 export interface Reservation {
-  id: string;
-  userId: Types.ObjectId;
+  id: number;
+  userId: number;
   roomId: number;
   date: string;
   startTime: string;
@@ -34,14 +41,51 @@ export interface Reservation {
   status: ReservationStatus;
 }
 
-export type ReservationDoc = Omit<Reservation, "id">;
+export type NewReservation = Omit<Reservation, "id">;
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  message?: string;
+}
+
+export type ID = number | string;
+export type StringOrNumber = string | number;
+export type RoomFeature = "projector" | "whiteboard" | "quiet-zone";
+export type ReservationAction = "approve" | "reject" | "cancel";
+
+export type ReservationWithDetails = Reservation & {
+  user: User;
+  room: StudyRoom;
+};
+
+export type StudyRoomUpdate = Partial<StudyRoom>;
+export type StudyRoomPreview = Pick<
+  StudyRoom,
+  "id" | "name" | "building" | "capacity"
+>;
+export type PublicUser = Omit<User, "email" | "isActive">;
+export type ReservationStatusCount = Record<ReservationStatus, number>;
+
+export type UserDoc = Omit<User, "id"> & {
+  password: string;
+};
+
+export type ReservationDoc = Omit<Reservation, "id" | "userId"> & {
+  userId: Types.ObjectId;
+};
 
 export type NewReservationBody = Pick<
   Reservation,
-  "roomId" | "date" | "startTime" | "endTime" | "purpose" | "status"
+  "roomId" | "date" | "startTime" | "endTime" | "purpose"
 >;
 
-export type UpdateReservationBody = Partial<NewReservationBody>;
+export type UpdateReservationBody = Partial<
+  Pick<
+    Reservation,
+    "roomId" | "date" | "startTime" | "endTime" | "purpose" | "status"
+  >
+>;
 
 export interface IdParam {
   id: string;

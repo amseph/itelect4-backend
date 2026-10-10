@@ -2,13 +2,11 @@ import bcrypt from "bcryptjs";
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { UserModel } from "../models/User";
-import { Role } from "../types/index";
 
 interface RegisterBody {
   name: string;
   email: string;
   password: string;
-  role?: Role;
 }
 
 interface LoginBody {
@@ -20,7 +18,7 @@ export const authRouter = Router();
 
 authRouter.post<unknown, unknown, RegisterBody>("/register", async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
     const existingUser = await UserModel.findOne({ email: email?.toLowerCase() });
 
     if (existingUser) {
@@ -28,7 +26,7 @@ authRouter.post<unknown, unknown, RegisterBody>("/register", async (req, res) =>
       return;
     }
 
-    const user = await UserModel.create({ name, email, password, role });
+    const user = await UserModel.create({ name, email, password });
     res.status(201).json(user.toJSON());
   } catch (error) {
     if (

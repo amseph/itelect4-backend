@@ -7,6 +7,7 @@ import type {
   NewReservationBody,
   UpdateReservationBody,
 } from "../types/index";
+import { ReservationStatus } from "../types/index";
 
 export const reservationRouter = Router();
 
@@ -56,6 +57,7 @@ reservationRouter.post<unknown, unknown, NewReservationBody>(
       const reservation = await ReservationModel.create({
         ...req.body,
         userId: req.userId,
+        status: ReservationStatus.Pending,
       });
 
       res.status(201).json(reservation);
