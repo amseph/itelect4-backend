@@ -31,6 +31,10 @@ const userSchema = new Schema<UserDoc>(
       enum: Object.values(Role),
       default: Role.Student,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
