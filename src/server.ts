@@ -9,10 +9,12 @@ async function startServer(): Promise<void> {
     throw new Error("JWT_SECRET is not set");
   }
 
-  await connectDatabase();
-
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
+  });
+
+  connectDatabase().catch((error: unknown) => {
+    console.error("Unable to connect to MongoDB during startup", error);
   });
 }
 

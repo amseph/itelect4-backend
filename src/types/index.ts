@@ -71,6 +71,8 @@ export type UserDoc = Omit<User, "id"> & {
   password: string;
 };
 
+export type StudyRoomDoc = StudyRoom;
+
 export type ReservationDoc = Omit<Reservation, "id" | "userId"> & {
   userId: Types.ObjectId;
 };
