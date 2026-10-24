@@ -51,7 +51,7 @@ export async function reviewProject(
       systemInstruction: SYSTEM_PROMPT,
       responseMimeType: "application/json",
       responseJsonSchema: reviewJsonSchema,
-      httpOptions: { timeout: 30_000 },
+      httpOptions: { timeout: 60_000 },
     },
   });
 
