@@ -1,6 +1,6 @@
 import type { Review } from "../schemas/review";
 
-export const MODEL = "gemini-flash-latest";
+export const MODEL = "gemini-3.5-flash-lite";
 
 export const SYSTEM_PROMPT = `
 You are the study session planning assistant for the Campus Study Room Reservation System. A student describes a planned study session or study room reservation, and you provide a concise, practical review.
