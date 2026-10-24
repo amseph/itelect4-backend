@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { connectDatabase } from "./config/db";
 import { authRouter } from "./routes/auth";
+import { aiRouter } from "./routes/ai";
 import { reservationRouter } from "./routes/reservations";
 import { roomRouter } from "./routes/rooms";
 
@@ -35,11 +36,17 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/ai", aiRouter);
 app.use("/api/rooms", roomRouter);
 app.use("/api/reservations", reservationRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Route not found" });
+});
+
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error(err);
+  res.status(500).json({ message: "An unexpected error occurred. Please try again." });
 });
 
 export default app;
