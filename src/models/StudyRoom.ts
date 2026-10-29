@@ -9,6 +9,15 @@ const studyRoomSchema = new Schema<StudyRoomDoc>(
     capacity: { type: Number, required: true, min: 1 },
     hasProjector: { type: Boolean, required: true },
     isAvailable: { type: Boolean, required: true },
+    amenities: {
+      type: [
+        {
+          type: String,
+          enum: ["aircon", "tv", "whiteboard", "projector", "quiet-zone"],
+        },
+      ],
+      default: undefined,
+    },
   },
   {
     toJSON: {
