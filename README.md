@@ -2,111 +2,94 @@
 
 # Campus Study Room Reservation System - Backend
 
-REST API for the [Campus Study Room Reservation System frontend](https://github.com/amseph/itelect4-project). It provides authentication, study room data, user-scoped reservation management, and an AI study-plan review endpoint.
+## About
+
+This is the backend API for the Campus Study Room Reservation System. It handles user authentication, study room data, reservations, and the AI Study Assistant.
+
+## Main Features
+
+- User registration and login
+- Study room data
+- Reservation management
+- AI study-plan review
+- Database persistence
 
 ## Tech Stack
 
-- Node.js and TypeScript
+- Node.js
+- TypeScript
 - Express
-- MongoDB Atlas with Mongoose
-- JWT authentication and bcryptjs password hashing
-- CORS and dotenv
+- MongoDB Atlas
+- JWT authentication
+- Gemini API
 
-## Functionality
+## Main API Features
 
-- User registration and login with JWT authentication
-- Public study room retrieval
-- Protected reservation management scoped to the authenticated user
-- MongoDB persistence
-- CORS configured through `CORS_ORIGIN` for the deployed frontend
-- AI study-plan review using Gemini, with authenticated requests and input validation
-
-## API Overview
-
-| Method | Endpoint | Access | Description |
-| --- | --- | --- | --- |
-| GET | `/api/health` | Public | Reports API and database connection status |
-| POST | `/api/auth/register` | Public | Register a user |
-| POST | `/api/auth/login` | Public | Log in and receive a JWT |
-| POST | `/api/ai` | JWT required | Review a proposed study session and return a study-plan summary, strengths, improvements, and readiness |
-| GET | `/api/rooms` | Public | List study rooms |
-| GET | `/api/rooms/:id` | Public | Retrieve a study room by numeric ID |
-| GET | `/api/reservations` | JWT required | List the authenticated user's reservations |
-| GET | `/api/reservations/:id` | JWT required | Retrieve one of the authenticated user's reservations |
-| POST | `/api/reservations` | JWT required | Create a reservation for the authenticated user |
-| PATCH | `/api/reservations/:id` | JWT required | Update one of the authenticated user's reservations |
-| DELETE | `/api/reservations/:id` | JWT required | Delete one of the authenticated user's reservations |
-
-Pass the login token as a bearer token in the `Authorization` header for protected endpoints.
-
-The frontend sends `Authorization: Bearer <token>` for protected API requests, including AI reviews and reservation management.
+- Authentication
+- Study rooms
+- Reservations
+- AI study-plan review
+- Health check at `/api/health`
 
 ## Architecture
 
 ```mermaid
-flowchart LR
-    Frontend[Frontend React / Vite<br/>Vercel]
-    Backend[Backend Express API<br/>Vercel]
-    MongoDB[(MongoDB Atlas)]
+flowchart TB
+    Frontend[React Frontend]
+    Backend[Express Backend]
+    MongoDB[(MongoDB)]
     Gemini[Gemini API]
 
-    Frontend -->|API requests; Bearer token where required| Backend
+    Frontend --> Backend
     Backend --> MongoDB
     Backend --> Gemini
 ```
 
+The frontend sends API requests to the Express backend. The backend stores and retrieves application data from MongoDB. The AI Study Assistant uses Gemini through the backend.
+
 ## Environment Variables
 
-Set the following variables in the environment:
-
 - `MONGODB_URI` — MongoDB connection string
-- `JWT_SECRET` — secret used to sign authentication tokens
-- `CORS_ORIGIN` — allowed frontend origin or comma-separated origins
-- `GEMINI_API_KEY` — API key used for AI study-plan reviews
+- `JWT_SECRET` — used for authentication tokens
+- `CORS_ORIGIN` — allowed frontend origin
+- `GEMINI_API_KEY` — API key for the AI feature
 - `PORT` — local server port (defaults to `4000`)
 
-## Local Development
+## Local Setup
 
-Install dependencies:
+1. Install dependencies:
+
+   ```bash
+   npm ci
+   ```
+
+2. Add the required environment variables to a `.env` file in the project root.
+3. Start the local server:
+
+   ```bash
+   npm run dev
+   ```
+
+Run these commands to test and check the project:
 
 ```bash
-npm install
-```
-
-Create a `.env` file in the project root and set the environment variables listed above. For automated tests, `JWT_SECRET` must be available to the process; tests load local values from `.env` and never connect to MongoDB or Gemini.
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Build the TypeScript project:
-
-```bash
+npm test
+npm run typecheck
 npm run build
 ```
 
-Seed the study rooms:
+## Health Check
 
-```bash
-npm run seed
-```
-
-## Health Endpoint
-
-`GET /api/health` returns the API and database connection status. A healthy deployed database connection returns:
-
-```json
-{"ok":true,"db":true}
-```
+Use `/api/health` to check whether the API and database connection are available.
 
 ## Live Deployment
 
 - Frontend: https://itelect4-project-chi.vercel.app
 - Backend: https://itelect4-backend-flame.vercel.app
 
-Frontend repository: https://github.com/amseph/itelect4-project
+## Frontend Repository
+
+https://github.com/amseph/itelect4-project
 
 ## AI Use Disclosure
 
